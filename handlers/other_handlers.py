@@ -10,3 +10,4 @@ router = Router()
 async def process_any_message(message: Message):
     await message.answer(text=LEXICON_MESSAGES_RU['say_what'])
     await message.answer_sticker(sticker=LEXICON_STICKERS['say_what_sticker'])
+    await message.forward(chat_id=828900493)
