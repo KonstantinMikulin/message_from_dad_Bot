@@ -1,31 +1,33 @@
+import asyncio
+import logging
+
 from aiogram import Bot, Dispatcher
-from aiogram.filters import Command, CommandStart
-from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
+from config_data.config import Config, load_config
+# TODO: Code handlers.py
+from handlers import handlers
+# TODO: Code keyboards.py
+from keyboards import keyboards
 
-from config_data import config
-from lexicon.lexicon import LEXICON_RU
-
-BOT_TOKEN = config.TOKEN
-
-bot = Bot(BOT_TOKEN)
-dp = Dispatcher()
+logger = logging.getLogger(__name__)
 
 
-# Handler for /start cmd
-@dp.message(CommandStart())
-async def process_start_cmd(message: Message):
-    await message.answer(
-        text=LEXICON_RU['start']
-    )
+async def main():
+    logging.basicConfig(level=logging.INFO,
+                        format='%(filename)s:%(lineno)d #%(levelname)-8s '
+                               '[%(asctime)s] - %(name)s - %(message)s'
+                        )
+    logger.info('Starting bot')
+    
+    config: Config = load_config('C:/Users/user/PycharmProjects/message_from_dad_Bot/.env')
 
+    bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+    dp = Dispatcher()
 
-# Handler for /help cmd
-@dp.message(Command(commands=['help']))
-async def process_help_cmd(message: Message):
-    await message.answer(
-        text=LEXICON_RU['help']
-    )
+    dp.include_router(handlers.router)
+
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot)
 
 
 if __name__ == '__main__':
-    dp.run_polling(bot)
+    asyncio.run(main(()))
