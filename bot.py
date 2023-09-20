@@ -3,8 +3,8 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
-# TODO: Code handlers.py
-from handlers import handlers
+# TODO: Code user_handlers.py
+from handlers import user_handlers
 # TODO: Code keyboards.py
 from keyboards import keyboards
 
@@ -23,11 +23,11 @@ async def main():
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher()
 
-    dp.include_router(handlers.router)
+    dp.include_router(user_handlers.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 
 if __name__ == '__main__':
-    asyncio.run(main(()))
+    asyncio.run(main())
