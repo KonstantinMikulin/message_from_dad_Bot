@@ -1,4 +1,5 @@
 from copy import deepcopy
+import time
 
 from aiogram import F, Router
 from aiogram.filters import Command, CommandStart
@@ -13,6 +14,9 @@ router = Router()
 async def process_start_cmd(message: Message):
     await message.answer(LEXICON_MESSAGES_RU[message.text])
     # TODO: Add user to DB
+    time.sleep(3)
+    await message.answer(text='Хочешь пошучу?',
+                         reply_markup=)
 
 
 @router.message(Command(commands=['help']))

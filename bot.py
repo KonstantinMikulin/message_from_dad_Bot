@@ -3,7 +3,6 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
-# TODO: Code user_handlers.py
 from handlers import user_handlers, other_handlers
 # TODO: Code keyboards.py
 from keyboards import keyboards
