@@ -4,7 +4,7 @@ import logging
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
 # TODO: Code user_handlers.py
-from handlers import user_handlers
+from handlers import user_handlers, other_handlers
 # TODO: Code keyboards.py
 from keyboards import keyboards
 
@@ -24,6 +24,7 @@ async def main():
     dp = Dispatcher()
 
     dp.include_router(user_handlers.router)
+    dp.include_router(other_handlers.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
