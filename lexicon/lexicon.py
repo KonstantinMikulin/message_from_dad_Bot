@@ -6,6 +6,7 @@ LEXICON_MESSAGES_RU: dict[str, str] = {
              '/help - какая никакая помощь, команды там есть... вот...\n'
              '/fillform - заполнить анкету\n'
              '/showdata - показать анкету\n'
+             '/booking - забронировать\n'
              '/cancel - прервать заполнение анкеты\n'
              '/joke - прислать умопомрачительную шутку!\n',
     '/cancel': 'Нечего отменять',
@@ -44,6 +45,12 @@ LEXICON_FILLFORM_RU: dict[str, str] = {
                 'анкеты - отправьте команду /showdata',
     'no_form': 'Вы еще не заполняли анкету. Чтобы приступить - '
                'отправьте команду /fillform'
+}
+
+# Handler for booking
+LEXICON_BOOKING_RU: dict[str, str] = {
+    'pick_date': 'Пожалуйста, выберите день',
+    'pick_time': 'Пожалуйста, выберите время'
 }
 
 # Dict for sending stickers

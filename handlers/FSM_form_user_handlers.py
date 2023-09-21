@@ -96,33 +96,3 @@ async def process_photo_uploaded(message: Message, state: FSMContext, largest_ph
 @router.message(StateFilter(FSMFillForm.upload_photo))
 async def warning_photo(message: Message):
     await message.answer(text=LEXICON_FILLFORM_RU['not_photo'])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
