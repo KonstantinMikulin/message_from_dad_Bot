@@ -6,6 +6,7 @@ from aiogram.fsm.state import default_state
 
 from lexicon.lexicon import (LEXICON_MESSAGES_RU, LEXICON_FILLFORM_RU)
 from FSM.fsm import FSMFillForm, user_dict
+from keyboards.keyboards import create_gender_kb
 
 router = Router()
 
@@ -51,3 +52,77 @@ async def warning_not_name(message: Message):
                 lambda x: x.text.isdigit() and 4 <= int(x.text) <= 120)
 async def process_age_sent(message: Message, state: FSMContext):
     await state.update_data(age=message.text)
+    await message.answer(text=LEXICON_FILLFORM_RU['fill_gender'],
+                         reply_markup=create_gender_kb())
+    await state.set_state(FSMFillForm.fill_gender)
+
+
+# Handler if age was incorrect
+@router.message(StateFilter(FSMFillForm.fill_age))
+async def warning_not_age(message: Message):
+    await message.answer(text=LEXICON_FILLFORM_RU['not_age'])
+
+
+# Handler callback for gender and switch to upload_photo state
+@router.callback_query(StateFilter(FSMFillForm.fill_gender),
+                       F.data.in_(['male', 'female']))
+async def process_gender_press(callback: CallbackQuery, state: FSMContext):
+    await state.update_data(gender=callback.data)
+    await callback.message.delete()
+    await callback.message.answer(text=LEXICON_FILLFORM_RU['upload_photo'])
+    await state.set_state(FSMFillForm.upload_photo)
+
+
+# Handler if no callback with gender
+@router.message(StateFilter(FSMFillForm.fill_gender))
+async def warning_gender(message: Message):
+    await message.answer(text=LEXICON_FILLFORM_RU['not_gender'])
+
+
+# Handler if photo uploaded and stopping FSM
+@router.message(StateFilter(FSMFillForm.upload_photo),
+                F.photo[-1].as_('largest_photo'))
+async def process_photo_uploaded(message: Message, state: FSMContext, largest_photo: PhotoSize)
+    await state.update_data(largest_photo=largest_photo.file_unique_id,
+                            photo_id=largest_photo.file_id)
+    user_dict[message.from_user.id] = await state.get_data()
+    await state.clear()
+
+    await message.answer(text=LEXICON_FILLFORM_RU['fill_done'])
+    await message.answer(text=LEXICON_FILLFORM_RU['fill_end'])
+
+
+# Handler if photo was not uploaded
+@router.message(StateFilter(FSMFillForm.upload_photo))
+async def warning_photo(message: Message):
+    await message.answer(text=LEXICON_FILLFORM_RU['not_photo'])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

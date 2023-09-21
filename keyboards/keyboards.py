@@ -25,3 +25,13 @@ def create_rating_kb(width: int = 2) -> InlineKeyboardMarkup:
     return kb_builder.as_markup()
 
 
+def create_gender_kb() -> InlineKeyboardMarkup:
+    kb_builder = InlineKeyboardBuilder()
+
+    button_male = InlineKeyboardButton(text='Мужской ♂',
+                                       callback_data='male')
+    button_female = InlineKeyboardButton(text='Женский ♀',
+                                         callback_data='female')
+    kb_builder.row(button_male, button_female)
+
+    return kb_builder.as_markup()
