@@ -82,7 +82,7 @@ async def warning_gender(message: Message):
 # Handler if photo uploaded and stopping FSM
 @router.message(StateFilter(FSMFillForm.upload_photo),
                 F.photo[-1].as_('largest_photo'))
-async def process_photo_uploaded(message: Message, state: FSMContext, largest_photo: PhotoSize)
+async def process_photo_uploaded(message: Message, state: FSMContext, largest_photo: PhotoSize):
     await state.update_data(largest_photo=largest_photo.file_unique_id,
                             photo_id=largest_photo.file_id)
     user_dict[message.from_user.id] = await state.get_data()

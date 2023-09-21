@@ -7,8 +7,9 @@ from aiogram.fsm.state import default_state
 
 from keyboards.keyboards import create_inline_joke_kb, create_rating_kb
 from lexicon.lexicon import (LEXICON_MESSAGES_RU, LEXICON_JOKES,
-                             LEXICON_JOKES_STICKERS, LEXICON_STICKERS)
+                             LEXICON_JOKES_STICKERS, LEXICON_STICKERS, LEXICON_FILLFORM_RU)
 from services.services import get_random_value
+from FSM.fsm import user_dict
 
 router = Router()
 
@@ -77,3 +78,15 @@ async def process_no_joke_press(callback: CallbackQuery):
                                   reply_markup=create_inline_joke_kb())
 
     await callback.answer()
+
+
+# Handler for "/showdata" cmd
+@router.message(Command(commands=['showdata']), StateFilter(default_state))
+async def process_showdata_cmd(message: Message):
+    if message.from_user.id in user_dict:
+        await message.answer_photo(photo=user_dict[message.from_user.id]['photo_id'],
+                                   caption=f'Имя: {user_dict[message.from_user.id]["name"]}\n'
+                                           f'Возраст: {user_dict[message.from_user.id]["age"]}\n'
+                                           f'Пол: {user_dict[message.from_user.id]["gender"]}\n')
+    else:
+        await message.answer(text=LEXICON_FILLFORM_RU['no_form'])
