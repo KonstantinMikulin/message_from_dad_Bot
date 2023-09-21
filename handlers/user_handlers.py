@@ -1,18 +1,14 @@
-from copy import deepcopy
 import time
 
 from aiogram import F, Router
 from aiogram.filters import Command, CommandStart, StateFilter
-from aiogram.types import CallbackQuery, Message, PhotoSize
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import default_state, State, StatesGroup
-from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import CallbackQuery, Message
+from aiogram.fsm.state import default_state
 
 from keyboards.keyboards import create_inline_joke_kb, create_rating_kb
 from lexicon.lexicon import (LEXICON_MESSAGES_RU, LEXICON_JOKES,
                              LEXICON_JOKES_STICKERS, LEXICON_STICKERS)
 from services.services import get_random_value
-from FSM.fsm import FSMFillForm, user_dict
 
 router = Router()
 
@@ -29,11 +25,6 @@ async def process_start_cmd(message: Message):
 @router.message(Command(commands=['help']), StateFilter(default_state))
 async def process_help_cmd(message: Message):
     await message.answer(LEXICON_MESSAGES_RU[message.text])
-
-
-# Handler for "/cancel" if FSM in default state
-@router.message(Command(commands=['cancel']), StateFilter(default_state))
-
 
 
 # Handler for 'joke' cmd

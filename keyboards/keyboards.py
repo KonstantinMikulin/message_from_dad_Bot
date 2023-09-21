@@ -23,3 +23,5 @@ def create_rating_kb(width: int = 2) -> InlineKeyboardMarkup:
     kb_builder.row(*buttons, width=width)
 
     return kb_builder.as_markup()
+
+
