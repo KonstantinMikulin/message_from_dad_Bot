@@ -81,4 +81,11 @@ async def warning_not_phone_number(message: Message):
 @router.message(StateFilter(FSMBooking.payment), F.data.split(':').isdigit())
 async def process_payment(message: Message, state: FSMContext):
     await state.update_data(payment=True)
-    await message.answer(text=LEXICON_BOOKING_RU[''])
+    await message.answer(text=LEXICON_BOOKING_RU['sum_data'])
+    user_dict_booking[message.from_user.id] = await state.get_data()
+    await message.answer(text=f'Дата: {user_dict_booking[message.from_user.id]["date"]}\n'
+                              f'Время: {user_dict_booking[message.from_user.id]["time"]}\n'
+                              f'Имя: {user_dict_booking[message.from_user.id]["name"]}\n'
+                              f'Номер телефона: {user_dict_booking[message.from_user.id]["phone_number"]}\n'
+                              f'Оплачено: {user_dict_booking[message.from_user.id]["payment"]}'
+                         )

@@ -18,10 +18,10 @@ class FSMFillForm(StatesGroup):
 
 # FSM state group for booking
 class FSMBooking(StatesGroup):
-    pick_date = State()
-    pick_time = State()
-    fill_name = State()
-    fill_phone_number = State()
-    payment = State()
+    pick_date = State()  # key: date
+    pick_time = State()  # key: time
+    fill_name = State()  # key: name
+    fill_phone_number = State()  # key: phone_number
+    payment = State()  # key: payment
     sum_data = State()
     confirmation = State()

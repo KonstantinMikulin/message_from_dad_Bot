@@ -75,7 +75,8 @@ LEXICON_BOOKING_RU: dict[str, str] = {
                         'Если вы хотите прервать бронирование -\n'
                         'отправьте команду /cancel',
     'payment': 'Пожалуйста, оплатите вашу бронь',
-    'sum_data': ''
+    'sum_data': 'Мы почти закончили\n'
+                'Проверьте всё, пожалуйста'
 }
 
 # Dict for sending stickers
