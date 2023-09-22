@@ -4,6 +4,8 @@ from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import default_state
 
+from phonenumbers import parse, is_valid_number
+
 from FSM.fsm import FSMBooking, user_dict_booking
 from lexicon.lexicon import LEXICON_BOOKING_RU
 
@@ -54,36 +56,29 @@ async def process_sent_name(message: Message, state: FSMContext):
     await state.set_state(FSMBooking.fill_phone_number)
 
 
+# Handler if name was incorrect
+@router.message(StateFilter(FSMBooking.fill_name))
+async def warning_not_name(message: Message):
+    await message.answer(text=LEXICON_BOOKING_RU['not_name'])
 
 
+# Handler if phone number was correct
+@router.message(StateFilter(FSMBooking.fill_phone_number),
+                lambda x: is_valid_number(parse(x.data)))
+async def process_phone_number(message: Message, state: FSMContext):
+    await state.update_data(phone_number=message.text)
+    await message.answer(text=LEXICON_BOOKING_RU['payment'])
+    await state.set_state(FSMBooking.payment)
 
 
+# Handler if phone number was incorrect
+@router.message(StateFilter(FSMBooking.fill_phone_number))
+async def warning_not_phone_number(message: Message):
+    await message.answer(text=LEXICON_BOOKING_RU['not_phone_number'])
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Handler if payment was correct
+@router.message(StateFilter(FSMBooking.payment), F.data.split(':').isdigit())
+async def process_payment(message: Message, state: FSMContext):
+    await state.update_data(payment=True)
+    await message.answer(text=LEXICON_BOOKING_RU[''])
