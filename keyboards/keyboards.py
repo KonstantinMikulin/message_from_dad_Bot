@@ -49,3 +49,18 @@ def create_confirmation_kb() -> InlineKeyboardMarkup:
     return kb_builder.as_markup()
 
 
+def create_alternation_kb(width: int = 2) -> InlineKeyboardMarkup:
+    kb_builder = InlineKeyboardBuilder()
+
+    btn_change_date = InlineKeyboardButton(text='Дату?',
+                                           callback_data='change_date')
+    btn_change_time = InlineKeyboardButton(text='Время?',
+                                           callback_data='change_time')
+    btn_change_name = InlineKeyboardButton(text='Имя?',
+                                           callback_data='change_name')
+    btn_change_phone_number = InlineKeyboardButton(text='Мобильный?',
+                                                   callback_data='change_phone_number')
+    kb_builder.row(btn_change_date, btn_change_time,
+                   btn_change_name, btn_change_phone_number)
+
+    return kb_builder.as_markup()

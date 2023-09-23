@@ -3,7 +3,8 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
-from handlers import user_handlers, other_handlers, FSM_form_user_handlers
+from handlers import (user_handlers, other_handlers,
+                      FSM_form_user_handlers, FSM_booking_user_handlers)
 from keyboards.main_menu import set_main_menu
 
 logger = logging.getLogger(__name__)
@@ -24,7 +25,8 @@ async def main():
     await set_main_menu(bot)
 
     dp.include_router(user_handlers.router)
-    dp.include_router(FSM_user_handlers.router)
+    dp.include_router(FSM_form_user_handlers.router)
+    dp.include_router(FSM_booking_user_handlers.router)
     dp.include_router(other_handlers.router)
 
     await bot.delete_webhook(drop_pending_updates=True)

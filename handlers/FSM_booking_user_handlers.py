@@ -8,7 +8,7 @@ from phonenumbers import parse, is_valid_number
 
 from FSM.fsm import FSMBooking, user_dict_booking
 from lexicon.lexicon import LEXICON_BOOKING_RU
-from keyboards.keyboards import create_confirmation_kb
+from keyboards.keyboards import create_confirmation_kb, create_alternation_kb
 
 router = Router()
 
@@ -21,7 +21,7 @@ async def process_booking_cmd(message: Message, state: FSMContext):
 
 
 # Handler if name was correct and switch to pick_time state
-@router.message(StateFilter(FSMBooking.pick_date), F.data.slplit(':').isdigit())
+@router.message(StateFilter(FSMBooking.pick_date), F.data.isdigit())
 async def process_picked_data(message: Message, state: FSMContext):
     await state.update_data(date=message.text)
     await message.answer(text=LEXICON_BOOKING_RU['pick_time'])
@@ -101,7 +101,14 @@ async def warning_not_payment(message: Message):
 
 
 # Handler for callback "confirmed/change"
-@router.callback_query(StateFilter(FSMBooking.confirmation))
+@router.callback_query(StateFilter(FSMBooking.confirmation),
+                       F.data.in_(['confirmed', 'change']))
+async def process_confirm_press(callback: CallbackQuery, state: FSMContext):
+    if callback.data == 'confirmed':
+        await callback.message.edit_text(text=LEXICON_BOOKING_RU['confirmed'])
+    else:
+        await callback.message.edit_text(text=LEXICON_BOOKING_RU['need_to_change'],
+                                         reply_markup=create_alternation_kb())
 
 
 
