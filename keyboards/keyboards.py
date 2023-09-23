@@ -35,3 +35,17 @@ def create_gender_kb() -> InlineKeyboardMarkup:
     kb_builder.row(button_male, button_female)
 
     return kb_builder.as_markup()
+
+
+def create_confirmation_kb() -> InlineKeyboardMarkup:
+    kb_builder = InlineKeyboardBuilder()
+
+    btn_confirm = InlineKeyboardButton(text='Всё верно',
+                                       callback_data='confirmed')
+    btn_change = InlineKeyboardButton(text='Надо изменить',
+                                      callback_data='change')
+    kb_builder.row(btn_confirm, btn_change)
+
+    return kb_builder.as_markup()
+
+

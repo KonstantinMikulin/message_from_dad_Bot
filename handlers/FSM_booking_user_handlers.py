@@ -8,6 +8,7 @@ from phonenumbers import parse, is_valid_number
 
 from FSM.fsm import FSMBooking, user_dict_booking
 from lexicon.lexicon import LEXICON_BOOKING_RU
+from keyboards.keyboards import create_confirmation_kb
 
 router = Router()
 
@@ -87,5 +88,39 @@ async def process_payment(message: Message, state: FSMContext):
                               f'Время: {user_dict_booking[message.from_user.id]["time"]}\n'
                               f'Имя: {user_dict_booking[message.from_user.id]["name"]}\n'
                               f'Номер телефона: {user_dict_booking[message.from_user.id]["phone_number"]}\n'
-                              f'Оплачено: {user_dict_booking[message.from_user.id]["payment"]}'
+                              f'Оплачено: {user_dict_booking[message.from_user.id]["payment"]}',
+                         reply_markup=create_confirmation_kb()
                          )
+    await state.set_state(FSMBooking.confirmation)
+
+
+# Handler if payment was not proceed
+@router.message(StateFilter(FSMBooking.payment))
+async def warning_not_payment(message: Message):
+    await message.answer(text=LEXICON_BOOKING_RU['not_payment'])
+
+
+# Handler for callback "confirmed/change"
+@router.callback_query(StateFilter(FSMBooking.confirmation))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
